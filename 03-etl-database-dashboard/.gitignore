@@ -20,3 +20,6 @@ logs/
 .vscode/
 .idea/
 *.swp
+ 
+# Streamlit
+.streamlit/
