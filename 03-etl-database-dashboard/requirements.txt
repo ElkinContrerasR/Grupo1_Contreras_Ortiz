@@ -1,7 +1,7 @@
 requests==2.31.0
-pandas==2.2.0
+pandas>=2.2.2
 python-dotenv==1.0.0
-matplotlib==3.8.0
+matplotlib>=3.9
 openpyxl==3.1.2
 psycopg[binary]
 sqlalchemy==2.0.23
