@@ -8,4 +8,4 @@ python-dotenv
 openpyxl
 sqlalchemy
 alembic
-psycopg[binary]
+psycopg2-binary
