@@ -42,6 +42,8 @@ selected_rockets = st.sidebar.multiselect(
 
 min_date = db.query(func.min(Launch.date_utc)).scalar()
 max_date = db.query(func.max(Launch.date_utc)).scalar()
+min_date = min_date.date()
+max_date = max_date.date()
 
 fecha_inicio = st.sidebar.date_input(
     "📅 Desde",
@@ -81,7 +83,11 @@ ver_analisis_avanzado = st.sidebar.checkbox(
 # QUERY BASE FILTRADA
 # =============================
 
-data = db.query(
+# =============================
+# QUERY BASE FILTRADA (DINÁMICA)
+# =============================
+
+query = db.query(
     Launch.date_utc,
     LaunchesCentral.rocket_name,
     LaunchesCentral.success,
@@ -91,24 +97,41 @@ data = db.query(
 ).join(
     Launch,
     Launch.launch_id == LaunchesCentral.launch_id
-).filter(
-    and_(
-        LaunchesCentral.rocket_name.in_(selected_rockets),
-        Launch.date_utc >= fecha_inicio,
-        Launch.date_utc <= fecha_fin,
-        LaunchesCentral.total_payload_mass >= payload_min,
+)
+
+# lista de filtros dinámicos
+filtros = []
+
+if selected_rockets:
+    filtros.append(
+        LaunchesCentral.rocket_name.in_(selected_rockets)
+    )
+
+if fecha_inicio:
+    filtros.append(
+        Launch.date_utc >= fecha_inicio
+    )
+
+if fecha_fin:
+    filtros.append(
+        Launch.date_utc <= fecha_fin
+    )
+
+if payload_min is not None:
+    filtros.append(
+        LaunchesCentral.total_payload_mass >= payload_min
+    )
+
+if payload_max is not None:
+    filtros.append(
         LaunchesCentral.total_payload_mass <= payload_max
     )
-).all()
 
-df = pd.DataFrame(data, columns=[
-    "date",
-    "rocket",
-    "success",
-    "payload_count",
-    "payload_mass",
-    "reused_cores"
-])
+# aplicar filtros solo si existen
+if filtros:
+    query = query.filter(*filtros)
+
+data = query.all()
 
 # =============================
 # TABS
