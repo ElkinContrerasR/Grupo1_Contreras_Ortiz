@@ -133,6 +133,15 @@ if filtros:
 
 data = query.all()
 
+df = pd.DataFrame(data, columns=[
+    "date",
+    "rocket",
+    "success",
+    "payload_count",
+    "payload_mass",
+    "reused_cores"
+])
+
 # =============================
 # TABS
 # =============================
