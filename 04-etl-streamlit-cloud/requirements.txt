@@ -1,0 +1,11 @@
+streamlit
+pandas>=2.2
+numpy
+matplotlib
+plotly
+requests
+python-dotenv
+openpyxl
+sqlalchemy
+alembic
+psycopg2-binary

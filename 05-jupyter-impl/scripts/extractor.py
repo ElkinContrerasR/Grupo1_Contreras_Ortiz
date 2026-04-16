@@ -4,8 +4,8 @@ import requests
 from datetime import datetime
 from dotenv import load_dotenv
 import logging
-from scripts.database import SessionLocal
-from scripts.models import *
+from database import SessionLocal
+from models import *
 from sqlalchemy.exc import IntegrityError
 
 load_dotenv()
